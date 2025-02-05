@@ -2,8 +2,6 @@ package com.infosys.simactivationportal.service;
 
 import com.infosys.simactivationportal.dto.CustomerDto;
 import com.infosys.simactivationportal.entity.Customer;
-import com.infosys.simactivationportal.entity.CustomerAddress;
-import com.infosys.simactivationportal.entity.SimDetails;
 import com.infosys.simactivationportal.repository.CustomerAddressRepository;
 import com.infosys.simactivationportal.repository.CustomerRepository;
 import com.infosys.simactivationportal.repository.SimDetailsRepository;
@@ -37,13 +35,14 @@ public class CustomerServiceTest {
         dto.setEmailAddress("vammu@gmail.com");
         dto.setIdType("aadhar");
 
-        Mockito.doNothing().when(customerAddressRepository).save(new CustomerAddress());
-        Mockito.doNothing().when(customerRepository).save(new Customer());
-        Mockito.doNothing().when(simDetailsRepository).save(new SimDetails());
+        Mockito.when(customerRepository.save(Mockito.any())).thenReturn(new Customer());
 
         String str = customerService.insertCustomer(dto);
 
         Assertions.assertNotNull(str);
+        Mockito.verify(customerAddressRepository, times(1)).save(Mockito.any());
+        Mockito.verify(simDetailsRepository, times(1)).save(Mockito.any());
+        Mockito.verify(customerRepository, times(1)).save(Mockito.any());
 
     }
 }

@@ -1,5 +1,6 @@
 package com.infosys.simactivationportal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class SimDetails {
     private Long simNumber;
     private String simStatus;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "simDetails",cascade = CascadeType.ALL)
     private SimOffers simOffers;
 

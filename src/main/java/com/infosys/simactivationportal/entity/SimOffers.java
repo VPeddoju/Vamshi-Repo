@@ -1,5 +1,6 @@
 package com.infosys.simactivationportal.entity;
 
+import com.infosys.simactivationportal.dto.SimOffersDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -84,5 +85,19 @@ public class SimOffers {
 
     public void setSimDetails(SimDetails simDetails) {
         this.simDetails = simDetails;
+    }
+
+    public SimOffers prepareEntityObject(SimOffersDto simOffersDto) {
+        SimOffers simOffers = new SimOffers();
+
+        simOffers.setCallQty(simOffersDto.getCallQty());
+        simOffers.setCost(simOffersDto.getCost());
+        simOffers.setOfferId(simOffersDto.getOfferId());
+        simOffers.setOfferName(simOffersDto.getOfferName());
+        simOffers.setDuration(simOffersDto.getDuration());
+        simOffers.setSimDetails(simOffersDto.getSimDetails());
+        simOffers.setDataQty(simOffersDto.getDataQty());
+
+        return simOffers;
     }
 }

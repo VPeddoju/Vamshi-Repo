@@ -2,6 +2,8 @@ package com.infosys.simactivationportal.service;
 
 import com.infosys.simactivationportal.dto.CustomerDto;
 import com.infosys.simactivationportal.entity.Customer;
+import com.infosys.simactivationportal.entity.SimDetails;
+import com.infosys.simactivationportal.entity.SimOffers;
 import com.infosys.simactivationportal.repository.CustomerAddressRepository;
 import com.infosys.simactivationportal.repository.CustomerRepository;
 import com.infosys.simactivationportal.repository.SimDetailsRepository;
@@ -21,12 +23,11 @@ public class CustomerService {
     @Autowired
     private SimDetailsRepository simDetailsRepository;
 
-    public String insertCustomer(CustomerDto dto) {
+    public Customer insertCustomer(CustomerDto dto) {
         Customer customer = dto.prepareEntityObject(dto);
         customerAddressRepository.save(customer.getCustomerAddress());
         simDetailsRepository.save(customer.getSimDetails());
-        customerRepository.save(customer);
-        return "successfully inserted";
+        return customerRepository.save(customer);
     }
 
     public String validateCustomer(String emailAddress, String dob){

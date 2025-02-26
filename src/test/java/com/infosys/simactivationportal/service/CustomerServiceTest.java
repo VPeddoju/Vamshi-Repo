@@ -27,22 +27,49 @@ public class CustomerServiceTest {
     @InjectMocks
     private CustomerService customerService;
 
+    private final static String email = "vammupeddoju@gmail.com";
+    private final static String dob = "12-03-2000";
+
     @Test
     public void testInsertCustomer(){
-        CustomerDto dto = new CustomerDto();
-        dto.setLastname("peddoju");
-        dto.setState("telangana");
-        dto.setEmailAddress("vammu@gmail.com");
-        dto.setIdType("aadhar");
+        //prepare db entity
+        Customer customer = new Customer();
+        customer.setLastname("peddoju");
+        customer.setState("telangana");
+        customer.setEmailAddress("vammu@gmail.com");
+        customer.setIdType("aadhar");
 
-        Mockito.when(customerRepository.save(Mockito.any())).thenReturn(new Customer());
+        //mock customerRepo
+        when(customerRepository.save(Mockito.any())).thenReturn(customer);
 
-        String str = customerService.insertCustomer(dto);
+        //calling actual methods
+        Customer customerResponse = customerService.insertCustomer(new CustomerDto());
 
+        //assert
+        Assertions.assertNotNull(customerResponse);
+        Assertions.assertEquals(customerResponse.getLastname(), customer.getLastname());
+        verify(customerAddressRepository, times(1)).save(Mockito.any());
+        verify(simDetailsRepository, times(1)).save(Mockito.any());
+        verify(customerRepository, times(1)).save(Mockito.any());
+
+    }
+
+    @Test
+    public void testvalidateCustomer(){
+        //prepare db entity
+        Customer customer = new Customer();
+        customer.setState("telanagana");
+        customer.setFirstName("vamshi");
+
+        //mock customerRepo
+        Mockito.when(customerRepository.findByEmailAddress(Mockito.any())).thenReturn(customer);
+
+        //calling actual methods
+        String str = customerService.validateCustomer(email,dob);
+
+        //assert
         Assertions.assertNotNull(str);
-        Mockito.verify(customerAddressRepository, times(1)).save(Mockito.any());
-        Mockito.verify(simDetailsRepository, times(1)).save(Mockito.any());
-        Mockito.verify(customerRepository, times(1)).save(Mockito.any());
-
+        Mockito.verify(customerRepository, times(1)).findByEmailAddress(Mockito.any());
+        Mockito.verify(customerAddressRepository, never()).save(Mockito.any());
     }
 }

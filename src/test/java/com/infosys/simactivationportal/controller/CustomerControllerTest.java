@@ -39,10 +39,10 @@ public class CustomerControllerTest {
 
         //calling actual methods
         ResponseEntity<?> response = customerController.insertCustomerDetails(Mockito.any());
-
+        Customer customer1 = (Customer) Objects.requireNonNull(response.getBody());
         //assert
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(string, Objects.requireNonNull(response.getBody()).toString());
+        Assertions.assertEquals(customer.getFirstName(), customer1.getFirstName());
         Mockito.verify(customerService,Mockito.times(1)).insertCustomer(Mockito.any());
     }
 }
